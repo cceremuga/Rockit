@@ -4,11 +4,16 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
+	"os"
 	"os/exec"
 	"time"
 
 	"github.com/briandowns/spinner"
 )
+
+const waitTime = "15"
+const publishWait = "10"
 
 // DependencyRetrieveResult wraps the JSON representation of dependency results in a SOQL query.
 type DependencyRetrieveResult struct {
@@ -42,7 +47,7 @@ func main() {
 	// Install the top-level package.
 	installPackage(username, packageID, installationKey)
 
-	fmt.Println("You're all set! The specified package has been installed.")
+	fmt.Println("You're all set, have a lovely day!")
 }
 
 // Pulls all expected command-line flags, validates them.
@@ -136,10 +141,27 @@ func installDependencies(dependencies []string, username string, installationKey
 
 // Installs a package.
 func installPackage(username string, packageID string, installationKey string) {
-	// TODO: Support install key.
+	fmt.Printf("Preparing to install %s.\n", packageID)
 
-	// TODO: Complete function.
-	fmt.Println("TODO: Install package.")
+	args := []string{
+		"force:package:install",
+		"--package",
+		packageID,
+		"-u",
+		username,
+		"-w",
+		waitTime,
+		"--publishwait",
+		publishWait} // TODO: Support install key.
+
+	packageInstallCommand := exec.Command("sfdx", args...)
+	packageInstallCommand.Stdout = os.Stdout
+	packageInstallCommand.Stderr = os.Stderr
+	err := packageInstallCommand.Run()
+
+	if err != nil {
+		log.Fatalf("Package install failed with %s.\n", err)
+	}
 }
 
 // Starts a cool loading indicator.
