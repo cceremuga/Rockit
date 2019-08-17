@@ -1,17 +1,26 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"os/exec"
 	"time"
 
 	"github.com/briandowns/spinner"
 )
 
+type DependencyRetrieveResult struct {
+	ExitCode int
+	Message  string
+}
+
 func main() {
 	username, packageID, installationKey := getAndValidateOpts()
 
-	getDependencies(username, packageID, installationKey)
+	dependencies := getDependencies(username, packageID, installationKey)
+
+	fmt.Printf("Found %d dependencies.", len(dependencies))
 
 	fmt.Println("We didn't actually do anything, this is a work in progress.")
 }
@@ -42,10 +51,44 @@ func validateOpts(username string, packageID string) {
 	}
 }
 
-func getDependencies(username string, packageID string, installationKey string) {
+func getDependencies(username string, packageID string, installationKey string) []string {
 	loader := startSpinner(" Retrieving dependencies...", "Dependencies retrieved!\n")
-	time.Sleep(4 * time.Second)
+
+	soqlQuery := fmt.Sprintf("\"SELECT Dependencies FROM SubscriberPackageVersion WHERE Id='%s'\"", packageID)
+
+	// Use tooling API to execute query.
+	args := []string{
+		"force:data:soql:query",
+		"-u",
+		username,
+		"-t",
+		"-q",
+		soqlQuery,
+		"--json"}
+
+	retrieveResults, err := runSfCliCommand(args)
+	dependencies := parseDependencyResponse(retrieveResults, err)
+
 	loader.Stop()
+
+	return dependencies
+}
+
+func runSfCliCommand(args []string) (string, error) {
+	retrieveCommand := exec.Command("sfdx", args...)
+	out, err := retrieveCommand.CombinedOutput()
+	return string(out), err
+}
+
+func parseDependencyResponse(rawJSON string, err error) []string {
+	var response DependencyRetrieveResult
+	json.Unmarshal([]byte(rawJSON), &response)
+
+	if err != nil {
+		panic(response.Message)
+	}
+
+	return []string{}
 }
 
 func startSpinner(suffix string, finalMsg string) *spinner.Spinner {
