@@ -24,7 +24,11 @@ type DependencyRetrieveResult struct {
 			Attributes struct {
 				Type string
 			}
-			Dependencies string
+			Dependencies struct {
+				IDs []struct {
+					SubscriberPackageVersionID string
+				}
+			}
 		}
 	}
 }
@@ -43,6 +47,8 @@ func main() {
 		// Install all dependencies.
 		installDependencies(dependencies, username, installationKey)
 	}
+
+	fmt.Println("Dependencies installed. Preparing to install top-level package.")
 
 	// Install the top-level package.
 	installPackage(username, packageID, installationKey)
@@ -118,30 +124,34 @@ func parseDependencyResponse(rawJSON string, err error) []string {
 		panic(response.Message)
 	}
 
-	// Extract the single SObject record containing the query result.
-	responseRecord := response.Result.Records[0]
+	// Extract the list of dependent packages from the query result.
+	dependentPackages := response.Result.Records[0].Dependencies.IDs
 
-	if responseRecord.Dependencies == "" {
+	if len(dependentPackages) == 0 {
 		// No dependencies found? Early exit.
 		return []string{}
 	}
 
-	// Result had dependencies, split into slice.
-	// TODO: Complete function.
-	fmt.Println("TODO: Actually parse dependency list.")
+	// Result had dependencies, build a slice of them.
+	dependencies := []string{}
 
-	return []string{}
+	for _, dependentPackage := range dependentPackages {
+		dependencies = append(dependencies, dependentPackage.SubscriberPackageVersionID)
+	}
+
+	return dependencies
 }
 
 // Installs all dependent packages.
-func installDependencies(dependencies []string, username string, installationKey string) {
-	// TODO: Complete function.
-	fmt.Println("TODO: Install dependencies.")
+func installDependencies(packageIDs []string, username string, installationKey string) {
+	for _, packageID := range packageIDs {
+		installPackage(username, packageID, installationKey)
+	}
 }
 
 // Installs a package.
 func installPackage(username string, packageID string, installationKey string) {
-	fmt.Printf("Preparing to install %s.\n", packageID)
+	fmt.Printf("Starting install for %s.\n", packageID)
 
 	args := []string{
 		"force:package:install",
