@@ -7,14 +7,23 @@ A Salesforce unlocked package installer with support for automatic dependency de
 ## Requirements
 
 * Salesforce CLI
-* Golang
 
 ## Usage
 
+* Be in a terminal.
 * Authorize the destination org with the Salesfordce CLI, make note of the username.
 * `cd` to wherever you cloned the repository.
 * `chmod +x ./sf-package-installer`
 * `./sf-package-installer -u target_org_username@example.com -p packageIdGoesHere -k optionalInstallKeyGoesHere`
+
+## Release Notes
+
+* 8/17/19 - Initial release with base functionality including dependency installation.
+
+## Known Issues
+
+* No support for package install keys yet.
+* Only compiled binary is for Darwin (Mac OS) architecture.
 
 ## Building
 
