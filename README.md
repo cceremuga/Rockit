@@ -11,10 +11,16 @@ A Salesforce unlocked package installer with support for automatic dependency de
 
 ## Usage
 
-* Authorize the destination org with the Salesfordce CLI.
-* `go build` in the directory where the repository lives.
+* Authorize the destination org with the Salesfordce CLI, make note of the username.
+* `cd` to wherever you cloned the repository.
 * `chmod +x ./sf-package-installer`
 * `./sf-package-installer -u target_org_username@example.com -p packageIdGoesHere -k optionalInstallKeyGoesHere`
+
+## Building
+
+* `cd` to wherever you cloned the repository.
+* `go get` to install depencencies.
+* `go build` to compile.
 
 ## License
 
