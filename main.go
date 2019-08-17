@@ -14,17 +14,35 @@ import (
 type DependencyRetrieveResult struct {
 	Status  int
 	Message string
+	Result  struct {
+		Records []struct {
+			Attributes struct {
+				Type string
+			}
+			Dependencies string
+		}
+	}
 }
 
 // Manages all aspects of the package installation process.
 func main() {
+	// Pull runtime options and validate them.
 	username, packageID, installationKey := getAndValidateOpts()
 
+	// Retrieve a list of dependencies for the top-level package.
 	dependencies := getDependencies(username, packageID, installationKey)
 
 	fmt.Printf("Found %d dependencies to install.\n", len(dependencies))
 
-	fmt.Println("We didn't actually do anything, this is a work in progress.")
+	if len(dependencies) > 0 {
+		// Install all dependencies.
+		installDependencies(dependencies, username, installationKey)
+	}
+
+	// Install the top-level package.
+	installPackage(username, packageID, installationKey)
+
+	fmt.Println("You're all set! The specified package has been installed.")
 }
 
 // Pulls all expected command-line flags, validates them.
@@ -68,7 +86,7 @@ func getDependencies(username string, packageID string, installationKey string) 
 		"-t",
 		"-q",
 		soqlQuery,
-		"--json"}
+		"--json"} // TODO: Support install key.
 
 	// Use tooling API to execute query.
 	retrieveResults, err := runSfCliCommand(args)
@@ -95,7 +113,33 @@ func parseDependencyResponse(rawJSON string, err error) []string {
 		panic(response.Message)
 	}
 
+	// Extract the single SObject record containing the query result.
+	responseRecord := response.Result.Records[0]
+
+	if responseRecord.Dependencies == "" {
+		// No dependencies found? Early exit.
+		return []string{}
+	}
+
+	// Result had dependencies, split into slice.
+	// TODO: Complete function.
+	fmt.Println("TODO: Actually parse dependency list.")
+
 	return []string{}
+}
+
+// Installs all dependent packages.
+func installDependencies(dependencies []string, username string, installationKey string) {
+	// TODO: Complete function.
+	fmt.Println("TODO: Install dependencies.")
+}
+
+// Installs a package.
+func installPackage(username string, packageID string, installationKey string) {
+	// TODO: Support install key.
+
+	// TODO: Complete function.
+	fmt.Println("TODO: Install package.")
 }
 
 // Starts a cool loading indicator.
