@@ -18,11 +18,11 @@ A Salesforce unlocked package installer with support for automatic dependency de
 
 ## Release Notes
 
+* 8/23/19 - Untested beta support for installation keys.
 * 8/17/19 - Initial release with base functionality including dependency installation.
 
 ## Known Issues
 
-* No support for package install keys yet.
 * Only compiled binary is for Darwin (Mac OS) architecture.
 
 ## Building

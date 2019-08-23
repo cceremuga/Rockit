@@ -89,7 +89,15 @@ func validateOpts(username string, packageID string) {
 func getDependencies(username string, packageID string, installationKey string) []string {
 	loader := startSpinner(" Retrieving dependencies...", "")
 
-	soqlQuery := fmt.Sprintf("SELECT Dependencies FROM SubscriberPackageVersion WHERE Id = '%s'", packageID)
+	keyAppend := ""
+
+	if installationKey != "" {
+		keyAppend = fmt.Sprintf(" AND InstallationKey = '%s'", installationKey)
+	}
+
+	soqlQuery :=
+		fmt.Sprintf("SELECT Dependencies FROM SubscriberPackageVersion WHERE Id = '%s'%s", packageID, keyAppend)
+
 	args := []string{
 		"force:data:soql:query",
 		"-u",
@@ -97,7 +105,7 @@ func getDependencies(username string, packageID string, installationKey string) 
 		"-t",
 		"-q",
 		soqlQuery,
-		"--json"} // TODO: Support install key.
+		"--json"}
 
 	// Use tooling API to execute query.
 	retrieveResults, err := runSfCliCommand(args)
@@ -162,7 +170,13 @@ func installPackage(username string, packageID string, installationKey string) {
 		"-w",
 		waitTime,
 		"--publishwait",
-		publishWait} // TODO: Support install key.
+		publishWait,
+		"--securitytype",
+		"AllUsers"} // TODO Support security types.
+
+	if installationKey != "" {
+		args = append(args, "--installationkey", installationKey)
+	}
 
 	packageInstallCommand := exec.Command("sfdx", args...)
 	packageInstallCommand.Stdout = os.Stdout
