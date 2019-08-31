@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/briandowns/spinner"
@@ -36,52 +37,59 @@ type DependencyRetrieveResult struct {
 // Manages all aspects of the package installation process.
 func main() {
 	// Pull runtime options and validate them.
-	username, packageID, installationKey := getAndValidateOpts()
+	username, packageIDs, installationKey := getAndValidateOpts()
 
-	// Retrieve a list of dependencies for the top-level package.
-	dependencies := getDependencies(username, packageID, installationKey)
+	// Loop through all top-level packages, install them.
+	installPackages(username, packageIDs, installationKey)
+}
 
-	fmt.Printf("Found %d dependencies to install.\n", len(dependencies))
+func installPackages(username string, packageIDs []string, installationKey string) {
+	for _, packageID := range packageIDs {
+		// Retrieve a list of dependencies for the top-level package.
+		dependencies := getDependencies(username, packageID, installationKey)
 
-	if len(dependencies) > 0 {
-		// Install all dependencies.
-		installDependencies(dependencies, username, installationKey)
+		fmt.Printf("Found %d dependencies to install.\n", len(dependencies))
+
+		if len(dependencies) > 0 {
+			// Install all dependencies.
+			installDependencies(dependencies, username, installationKey)
+		}
+
+		fmt.Println("Dependencies installed. Preparing to install top-level package.")
+
+		// Install the top-level package.
+		installPackage(username, packageID, installationKey)
+
+		fmt.Println("You're all set, have a lovely day!")
 	}
-
-	fmt.Println("Dependencies installed. Preparing to install top-level package.")
-
-	// Install the top-level package.
-	installPackage(username, packageID, installationKey)
-
-	fmt.Println("You're all set, have a lovely day!")
 }
 
 // Pulls all expected command-line flags, validates them.
-func getAndValidateOpts() (string, string, string) {
-	username, packageID, installationKey := getOpts()
-	validateOpts(username, packageID)
+func getAndValidateOpts() (string, []string, string) {
+	username, packageIDs, installationKey := getOpts()
+	validateOpts(username, packageIDs)
 
-	return username, packageID, installationKey
+	return username, strings.Split(packageIDs, ","), installationKey
 }
 
 // Gets all command-line flags.
 func getOpts() (string, string, string) {
 	username := flag.String("u", "", "The target org username to install packages to.")
-	packageID := flag.String("p", "", "The Id of the top-level package to install.")
+	packageIDs := flag.String("p", "", "The comma-separated Id(s) of the top-level package(s) to install.")
 	installationKey := flag.String("k", "", "An optional installation key for packages.")
 	flag.Parse()
 
-	return *username, *packageID, *installationKey
+	return *username, *packageIDs, *installationKey
 }
 
 // Validates expected command-line flags.
-func validateOpts(username string, packageID string) {
+func validateOpts(username string, packageIDs string) {
 	if username == "" {
 		panic("Target org username must be specified with the -u command-line flag.")
 	}
 
-	if packageID == "" {
-		panic("Top-level package Id must be specified with the -p command-line flag.")
+	if packageIDs == "" {
+		panic("Top-level package(s) must be specified with the -p command-line flag, separated by commas.")
 	}
 }
 

@@ -20,6 +20,7 @@ A Salesforce unlocked package installer with support for automatic dependency de
 
 ## Release Notes
 
+* 8/31/19 - Support for multiple, comma separated top-level packages.
 * 8/23/19 - Untested beta support for installation keys. Compiled binaries for all supported architectures.
 * 8/17/19 - Initial release with base functionality including dependency installation.
 
