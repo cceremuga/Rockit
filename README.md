@@ -1,9 +1,10 @@
 # 🚀 Rockit
-## Salesforce Package Installer
 
 [![Build Status](https://travis-ci.org/cceremuga/sf-package-installer.svg?branch=master)](https://travis-ci.org/cceremuga/sf-package-installer)
 
-A super duper Golang Salesforce unlocked package installer with support for automatic dependency detection and installation.
+A Golang Salesforce unlocked package installer with support for dependency detection and installation.
+
+Supercharge your DevOps process with automated package installs!
 
 ## Requirements
 
