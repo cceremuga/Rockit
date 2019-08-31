@@ -1,12 +1,15 @@
-# Salesforce Package Installer
+# 🚀 Rockit
+## Salesforce Package Installer
 
 [![Build Status](https://travis-ci.org/cceremuga/sf-package-installer.svg?branch=master)](https://travis-ci.org/cceremuga/sf-package-installer)
 
-A Salesforce unlocked package installer with support for automatic dependency detection and installation.
+A super duper Golang Salesforce unlocked package installer with support for automatic dependency detection and installation.
 
 ## Requirements
 
+* Windows, Linux, or Mac OS
 * Salesforce CLI
+* Knowledge of how to authenticate a target org with the Salesforce CLI.
 
 ## Usage
 
@@ -20,13 +23,13 @@ A Salesforce unlocked package installer with support for automatic dependency de
 
 ## Release Notes
 
-* 8/31/19 - Support for multiple, comma separated top-level packages.
+* 8/31/19 - Support for multiple, comma separated top-level packages. Renamed the tool, yay!
 * 8/23/19 - Untested beta support for installation keys. Compiled binaries for all supported architectures.
 * 8/17/19 - Initial release with base functionality including dependency installation.
 
 ## Known Issues
 
-* None
+* No unit tests. Embarassing, I know!
 
 ## Building
 
