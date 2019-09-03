@@ -19,8 +19,8 @@ Supercharge your DevOps process with automated package installs!
 * `cd` to wherever you cloned the repository.
 * `cd` to `bin`
 * `ls` to find the binary in the appropriate architecture for your system.
-* `chmod +x ./sf-package-installer-darwin`
-* `./sf-package-installer-darwin -u target_org_username@example.com -p packageIdGoesHere -k optionalInstallKeyGoesHere`
+* `chmod +x ./rockit-linux-amd64`
+* `./rockit-linux-amd64 -u target_org_username@example.com -p packageIdsGoHere -k optionalInstallKeyGoesHere`
 
 ## Release Notes
 
