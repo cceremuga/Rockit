@@ -1,6 +1,6 @@
 # 🚀 Rockit
 
-[![Build Status](https://travis-ci.org/cceremuga/sf-package-installer.svg?branch=master)](https://travis-ci.org/cceremuga/sf-package-installer)
+[![Build Status](https://travis-ci.org/cceremuga/Rockit.svg?branch=master)](https://travis-ci.org/cceremuga/Rockit)
 
 A Golang Salesforce unlocked package installer with support for dependency detection and installation.
 
