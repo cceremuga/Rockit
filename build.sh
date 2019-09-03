@@ -1,7 +1,9 @@
 #!/bin/bash
 
-for GOOS in darwin linux windows freebsd openbsd; do
-    for GOARCH in 386 amd64 arm arm64; do
-        go build -v -o bin/rockit-$GOOS-$GOARCH
+for PLATFORM in darwin linux windows freebsd openbsd; do
+    for ARCH in 386 amd64; do
+        export GOOS=$PLATFORM
+        export GOARCH=$ARCH
+        go build -o bin/rockit-$GOOS-$GOARCH
     done
 done
