@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for PLATFORM in darwin linux windows freebsd openbsd; do
+for PLATFORM in darwin linux windows; do
     for ARCH in 386 amd64; do
         export GOOS=$PLATFORM
         export GOARCH=$ARCH

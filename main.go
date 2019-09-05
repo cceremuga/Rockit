@@ -8,9 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"time"
-
-	"github.com/briandowns/spinner"
 )
 
 const waitTime = "15"
@@ -95,8 +92,6 @@ func validateOpts(username string, packageIDs string) {
 
 // Retrieves all dependency packages for the top-level package Id.
 func getDependencies(username string, packageID string, installationKey string) []string {
-	loader := startSpinner(" Retrieving dependencies...", "")
-
 	keyAppend := ""
 
 	if installationKey != "" {
@@ -118,8 +113,6 @@ func getDependencies(username string, packageID string, installationKey string) 
 	// Use tooling API to execute query.
 	retrieveResults, err := runSfCliCommand(args)
 	dependencies := parseDependencyResponse(retrieveResults, err)
-
-	loader.Stop()
 
 	return dependencies
 }
@@ -194,16 +187,4 @@ func installPackage(username string, packageID string, installationKey string) {
 	if err != nil {
 		log.Fatalf("Package install failed with %s.\n", err)
 	}
-}
-
-// Starts a cool loading indicator.
-func startSpinner(suffix string, finalMsg string) *spinner.Spinner {
-	loader := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	loader.Suffix = suffix
-	loader.FinalMSG = finalMsg
-	loader.HideCursor = true
-	loader.Color("cyan")
-	loader.Start()
-
-	return loader
 }

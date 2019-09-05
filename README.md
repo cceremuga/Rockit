@@ -24,9 +24,9 @@ Supercharge your DevOps process with automated package installs!
 
 ## Release Notes
 
+* 9/5/19 - Removed spinner, it didn't work so well in automated build runs.
 * 8/31/19 - Support for multiple, comma separated top-level packages. Renamed the tool, yay!
 * 8/23/19 - Untested beta support for installation keys. Compiled binaries for all supported architectures.
-* 8/17/19 - Initial release with base functionality including dependency installation.
 
 ## Known Issues
 

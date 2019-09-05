@@ -12,5 +12,5 @@ go:
 # failing test, we want to see both. Configure golangci-lint with a
 # .golangci.yml file at the top level of your repo.
 script:
-  - go build
+  - ./build.sh
   - go test -v -race ./...
